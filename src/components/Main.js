@@ -3,8 +3,6 @@ require('styles/App.scss');
 
 import React from 'react';
 
-let yeomanImage = require('../images/yeoman.png');
-
 // 获取图片相关的数据
 let imageDatas = require('../data/imageDatas.json');
 
@@ -14,23 +12,47 @@ imageDatas = (function getImageURL(imageDatasArr) {
         var singleImageData = imageDatasArr[i];
         singleImageData.imageURL = require('../images/' +
             singleImageData.fileName);
+        imageDatasArr[i] = singleImageData;
     }
+    return imageDatasArr;
 })(imageDatas);
+
+
+class ImgFigure extends React.Component {
+    render(){
+
+        return (
+            <figure className="img-figure">
+                <img src={this.props.data.imageURL}
+                    alt={this.props.data.desc} />
+                <figcaption>
+                    <h2 className="img-title">{this.props.data.title}</h2>
+                </figcaption>
+            </figure>
+        );
+    }
+}
 
 class AppComponent extends React.Component {
     render() {
-        return ( 
-        	// < div className = "index" >
-         //    < img src = { yeomanImage }
-         //    alt = "Yeoman Generator" / >
-         //    < div className = "notice" > Please edit < code > src / components / Main.js < /code> to get started!</div >
-         //    < /div>
-         <section className="stage" >
-         	<section className="img-sec">
-         	</section>
-         	<nav className="controller-nav">
-         	</nav>
-         </section>
+
+        let controllerUnits = [],
+            imgFigures = [];
+
+        imageDatas.forEach(function(value){
+            imgFigures.push(<ImgFigure data={value} />);
+        });
+
+
+        return (
+             <section className="stage" >
+                <section className="img-sec">
+                    {imgFigures}
+                </section>
+                <nav className="controller-nav">
+                    {controllerUnits}
+                </nav>
+             </section>
         );
     }
 }
